@@ -74,8 +74,8 @@ class Puzzle extends Component {
 
   renderRow(row) {
     let data = [];
-    for ( let ii = 0; ii < this.state.symbols.length; ii++) {
-      let childidx = this.state.symbols.length * row + ii;
+    for ( let ii = 0; ii < this.state.symbols.length - 1; ii++) {
+      let childidx = (this.state.symbols.length-1) * row + ii;
       data.push(<td key={ii}>{this.renderSquare(childidx)}</td>);
     }
     return data;
@@ -97,7 +97,7 @@ class Puzzle extends Component {
 
   render() {
     let rows = [];
-    for ( let ii = 0; ii < this.state.symbols.length; ii++) {
+    for ( let ii = 0; ii < this.state.symbols.length -1; ii++) {
       rows.push(<tr key={ii}>{this.renderRow(ii)}</tr>);
     }
 
