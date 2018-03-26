@@ -5,7 +5,7 @@ import Square from './Square';
 class Puzzle extends Component {
   constructor(props) {
     super(props);
-    console.log("Puzzle props:", props);
+    //console.log("Puzzle props:", props);
     if (props.puzzle.length === 81) {
       this.symbolCnt = 9;
       this.boxes = [
@@ -56,7 +56,7 @@ class Puzzle extends Component {
 
   renderBox(boxrow, boxcol) {
     let boxid = (this.boxcnt * boxrow) + boxcol
-    console.log("rendering box:", boxrow, boxcol)
+    //console.log("rendering box:", boxrow, boxcol)
     if (this.darkened.has(boxid)) {
       // style box appropriately
       return (
@@ -75,7 +75,7 @@ class Puzzle extends Component {
   }
 
   renderBoxSquares(boxrow, boxcol) {
-    console.log("rendering Squares box:", boxrow, boxcol)
+    //console.log("rendering Squares box:", boxrow, boxcol)
     let rows = []
     for (let ii = 0 ; ii < this.boxcnt ; ii++) {
       let row = []
@@ -130,7 +130,7 @@ class Puzzle extends Component {
   }
 
   renderBoxRow(row) {
-    console.log("render box row:", row);
+    //console.log("render box row:", row);
     let data = [];
     for ( let ii = 0; ii < this.boxcnt; ii++) {
       data.push(<td key={ii}>{this.renderBox(row, ii)}</td>);
@@ -170,7 +170,7 @@ class Puzzle extends Component {
   }
 
   renderBoxes() {
-    console.log("rendering the boxes")
+    //console.log("rendering the boxes")
     let rows = [];
     for ( let ii = 0; ii < this.boxcnt; ii++) {
       rows.push(<tr key={ii}>{this.renderBoxRow(ii)}</tr>);
