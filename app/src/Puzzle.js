@@ -152,13 +152,17 @@ class Puzzle extends Component {
     });
   }
 
-  render() {
+  renderSquares() {
     let rows = [];
     for ( let ii = 0; ii < this.state.symbols.length -1; ii++) {
       rows.push(<tr key={ii}>{this.renderRow(ii)}</tr>);
     }
 
     return <table><tbody>{rows}</tbody></table>
+  }
+
+  render() {
+    return this.renderSquares()
   }
 
 }
