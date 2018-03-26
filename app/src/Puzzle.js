@@ -39,6 +39,33 @@ class Square extends Component {
   }
 }
 
+function Box(props) {
+  let rows = []
+  for (let ii = 0 ; ii < props.side ; ii++) {
+    let row = []
+    for (let jj = 0 ; jj < props.side ; jj++) {
+      let idx = props.boxidxs[(ii *props.side) + jj]
+      row.push(
+        <td key={jj}>
+          <Square
+            symbols={props.symbols}
+            value={props.puzzle[idx]}
+            cb={props.cb} />
+        </td>);
+    }
+    rows.push(<tr key={ii}>{row}</tr>);
+  }
+  return (
+    <div>
+      <table>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 class Puzzle extends Component {
   constructor(props) {
     super(props);
@@ -56,6 +83,8 @@ class Puzzle extends Component {
         new Set([57,58,59,66,67,68,75,76,77, ]),
         new Set([60,61,62,69,70,71,78,79,80 ]),
       ];
+      this.boxsz = 4;
+      this.boxcnt = 3;
       this.darkened = new Set([0, 2,4,6,8]);
     } else if (props.puzzle.length === 16) {
       this.symbolCnt = 4;
@@ -65,12 +94,16 @@ class Puzzle extends Component {
         new Set([8,9, 12,13]),
         new Set([10, 11, 14,15]),
       ];
+      this.boxsz = 2;
+      this.boxcnt = 2;
       this.darkened = new Set([0, 3,]);
     } else if (props.puzzle.length === 4) {
       this.symbolCnt = 2;
       this.boxes = [
         [0],[1],[2],[3],
       ];
+      this.boxsz = 1;
+      this.boxcnt = 1;
       this.darkened = new Set([0, 3,]);
     } else {
       this.symbolCnt = 2;
@@ -83,6 +116,14 @@ class Puzzle extends Component {
     for (let ii = 0; ii < this.symbolCnt+1; ii++) {
       this.state.symbols.push(ii)
     }
+  }
+
+  renderBox(boxrow, boxcol) {
+    let boxid = (this.state.boxcnt * boxrow) * boxcol
+    if (this.darkened.has(boxid)) {
+      // style box appropriately
+    }
+    return <Box puzzle={this.state.puzzle} />
   }
 
   renderSquare(row, col) {
@@ -116,6 +157,14 @@ class Puzzle extends Component {
           cb={(v) => this.updateSquare(idx,v)}/>
       );
     }
+  }
+
+  renderBoxRow(row) {
+    let data = [];
+    for ( let ii = 0; ii < this.state.boxcnt; ii++) {
+      data.push(<td key={ii}>{this.renderBox(row, ii)}</td>);
+    }
+    return data;
   }
 
   renderRow(row) {
