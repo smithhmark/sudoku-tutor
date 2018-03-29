@@ -4,36 +4,29 @@ class Square extends Component {
   constructor(props) {
     super(props);
     //console.log("Square props:", props);
-    this.state = {
-      value: props.value,
-      symbols: props.symbols,
-    };
     this.deltaCB = props.cb;
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
-    console.log("Square handling change", event.target);
-    const st = this.state;
-    this.setState({
-      value: event.target.value,
-      symbols: st.symbols,
-    });
-    this.deltaCB(event.target.value);
+    console.log("Square forwarding change, name:", event.target.name, 
+      "value:", event.target.value);
+    this.props.cb(parseInt(event.target.value, 10));
+    //this.deltaCB(parseInt(event.target.value, 10));
   }
 
   render() {
+    const dispVal = this.props.value.toString()
     let opts = []
     opts.push(
-        <option key={0} value={0}></option>);
-    for (let ii = 1; ii < this.state.symbols.length ; ii++) {
-      let val = this.state.symbols[ii]
+        <option key={0} value={(0).toString()}></option>);
+    for (let ii = 1; ii < this.props.symbols.length ; ii++) {
+      let val = this.props.symbols[ii]
       opts.push(
-        <option key={ii} value={val}>{val}</option>);
+        <option key={ii} value={val.toString()}>{val}</option>);
     }
-    const val = this.state.value;
     return <select 
-      className="square" value={val} onChange={this.handleChange}>
+      className="square" value={dispVal} onChange={this.handleChange}>
         {opts}
       </select>;
   }

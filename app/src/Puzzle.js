@@ -45,8 +45,7 @@ class Puzzle extends Component {
       this.symbolCnt = 2;
     }
     this.state = {
-      initial: props.puzzle,
-      puzzle: props.puzzle.slice(),
+      puzzle: props.puzzle,
       symbols: [],
     };
     for (let ii = 0; ii < this.symbolCnt+1; ii++) {
@@ -55,7 +54,7 @@ class Puzzle extends Component {
   }
 
   renderBox(boxrow, boxcol) {
-    let boxid = (this.boxcnt * boxrow) + boxcol
+    const boxid = (this.boxcnt * boxrow) + boxcol
     //console.log("rendering box:", boxrow, boxcol)
     if (this.darkened.has(boxid)) {
       // style box appropriately
@@ -80,53 +79,21 @@ class Puzzle extends Component {
     for (let ii = 0 ; ii < this.boxcnt ; ii++) {
       let row = []
       for (let jj = 0 ; jj < this.boxcnt ; jj++) {
-        let sqrrow = boxrow * this.boxcnt + ii
-        let sqrcol = boxcol * this.boxcnt + jj
-        let idx = sqrrow * this.symbolCnt + sqrcol
+        const sqrrow = boxrow * this.boxcnt + ii
+        const sqrcol = boxcol * this.boxcnt + jj
+        const idx = sqrrow * this.symbolCnt + sqrcol
+        const val = this.props.puzzle[idx]
         row.push(
           <td key={jj}>
             <Square
               symbols={this.state.symbols}
-              value={this.state.puzzle[idx]}
-              cb={(v) => this.updateSquare(idx,v)}/>
+              value={val}
+              cb={(v) => this.props.updateSquare(idx,v)}/>
           </td>);
       }
       rows.push(<tr key={ii}>{row}</tr>);
     }
     return rows
-  }
-
-  renderSquare(row, col) {
-    let idx = (this.state.symbols.length-1) * row + col;
-    let dark = false;
-    for (let bx = 0; bx< this.boxes.length ; bx++) {
-      if (this.boxes[bx].has(idx)) {
-        if (this.darkened.has(bx)) {
-          dark = true;
-        }
-      }
-    }
-    if (dark) {
-      return (
-        <span 
-          key={idx}
-          style={{backgroundColor:'gray'}}>
-
-        <Square 
-          value={this.state.puzzle[idx]}
-          symbols={this.state.symbols}
-          cb={(v) => this.updateSquare(idx,v)}/>
-        </span>
-      );
-    } else {
-      return (
-        <Square 
-          key={idx}
-          value={this.state.puzzle[idx]}
-          symbols={this.state.symbols}
-          cb={(v) => this.updateSquare(idx,v)}/>
-      );
-    }
   }
 
   renderBoxRow(row) {
@@ -138,17 +105,9 @@ class Puzzle extends Component {
     return data;
   }
 
-  renderRow(row) {
-    let data = [];
-    for ( let ii = 0; ii < this.state.symbols.length - 1; ii++) {
-      data.push(<td key={ii}>{this.renderSquare(row, ii)}</td>);
-    }
-    return data;
-  }
-
   updateSquare(idx, newval) {
-    console.log("Puzzle updating state");
-    //console.log("  old:", this.state.puzzle[idx]);
+    console.log("Puzzle updating state at", idx, "to", newval);
+    console.log("  old:", this.state.puzzle[idx]);
     //console.log("  new:", newval);
     const st = this.state;
     let pz = st.puzzle.slice();
@@ -156,33 +115,16 @@ class Puzzle extends Component {
     this.setState({
       puzzle: pz,
       symbols: st.symbols,
-      initial: st.initial,
     });
   }
 
-  renderSquares() {
-    let rows = [];
-    for ( let ii = 0; ii < this.state.symbols.length -1; ii++) {
-      rows.push(<tr key={ii}>{this.renderRow(ii)}</tr>);
-    }
-
-    return <table><tbody>{rows}</tbody></table>
-  }
-
-  renderBoxes() {
-    //console.log("rendering the boxes")
+  render() {
     let rows = [];
     for ( let ii = 0; ii < this.boxcnt; ii++) {
       rows.push(<tr key={ii}>{this.renderBoxRow(ii)}</tr>);
     }
     return <table><tbody>{rows}</tbody></table>
   }
-
-  render() {
-    //return this.renderSquares()
-    return this.renderBoxes()
-  }
-
 }
 
 export default Puzzle
